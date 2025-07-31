@@ -31,12 +31,17 @@ config = easykube.Configuration.from_environment()
 
 #####
 # Create a sync or async client from the configuration
+#
+# Clients should be used in a context to ensure connections are properly disposed
 #####
 
 # Optionally specify a default namespace for the client
 # Defaults to the namespace from the kubeconfig if present, "default" otherwise
-sync_client = config.sync_client(default_namespace="default")
-async_client = config.async_client(default_namespace="default")
+with config.sync_client(default_namespace="default") as sync_client:
+    do_something(sync_client)
+
+async with config.async_client(default_namespace="default") as async_client:
+    await do_something(async_client)
 ```
 
 ## Interacting with Kubernetes objects
