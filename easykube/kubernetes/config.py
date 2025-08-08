@@ -172,8 +172,9 @@ class Configuration:
         Return a configuration from available information in the environment.
         """
         # An explicitly-specified kubeconfig file takes precedence
-        if "KUBECONFIG" in os.environ:
-            return cls.from_kubeconfig(os.environ["KUBECONFIG"], **kwargs)
+        kubeconfig = os.environ.get("KUBECONFIG")
+        if kubeconfig:
+            return cls.from_kubeconfig(kubeconfig, **kwargs)
         # Followed by a service account if configured
         try:
             return cls.from_serviceaccount(**kwargs)
